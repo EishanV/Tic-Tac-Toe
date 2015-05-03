@@ -20,6 +20,34 @@ class ViewController: UIViewController {
     
     @IBOutlet var button: UIButton!
     
+    @IBOutlet var gameOver: UILabel!
+    
+    @IBOutlet var playAgainButton: UIButton!
+    
+    @IBAction func playAgain(sender: AnyObject) {
+        
+        activePlayer = 1 // 1 = x, 2 = o
+        
+        gameActive = true
+        
+        gameState = [0,0,0,0,0,0,0,0,0]
+        
+        var button = UIButton()
+        
+        for (var i = 0; i < 9; i++) {
+            button = view.viewWithTag(i) as! UIButton
+            button.setImage(nil, forState: .Normal)
+        }
+        
+        gameOver.hidden = true
+        playAgainButton.hidden = true
+        
+        
+        gameOver.center = CGPointMake(gameOver.center.x - 400, gameOver.center.y)
+        playAgainButton.center = CGPointMake(playAgainButton.center.x - 400, playAgainButton.center.y)
+        
+    }
+    
     @IBAction func buttonPressed(sender: AnyObject) {
         
         
@@ -46,8 +74,25 @@ class ViewController: UIViewController {
             for combination in winningCombinations {
                 
                 if gameState[combination[0]] != 0 && gameState[combination[0]] == gameState[combination[1]] && gameState[combination[1]] == gameState[combination[2]] {
-
-                    println("We have a winner")
+                    
+                    var labelText = "Crosses has won!"
+                    
+                    if gameState[combination[0]] == 2 {
+                       labelText = "Noughts has won!"
+                    }
+                    
+                    gameOver.text = labelText
+                    
+                    gameOver.hidden = false
+                    playAgainButton.hidden = false
+                    
+                    
+                    UIView.animateWithDuration(0.5, animations: { () -> Void in
+                        self.gameOver.center = CGPointMake(self.gameOver.center.x + 400, self.gameOver.center.y)
+                        
+                        self.playAgainButton.center = CGPointMake(self.playAgainButton.center.x + 400, self.playAgainButton.center.y)
+                    })
+                    
                     gameActive = false
                 }
             }
@@ -58,10 +103,20 @@ class ViewController: UIViewController {
         
       }
     
+    override func viewDidLayoutSubviews() {
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        gameOver.hidden = true
+        playAgainButton.hidden = true
+        
+        
+        gameOver.center = CGPointMake(gameOver.center.x - 400, gameOver.center.y)
+        playAgainButton.center = CGPointMake(playAgainButton.center.x - 400, playAgainButton.center.y)
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,4 +126,3 @@ class ViewController: UIViewController {
 
 
 }
-
